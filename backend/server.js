@@ -17,17 +17,27 @@ connectDB();
 
 const app = express();
 const httpServer = createServer(app);
+
+// const io = new Server(httpServer, {
+//   cors: {
+//     origin: 'https://agent-com01.vercel.app', // In production, restrict this to your frontend URL
+//     methods: ['GET', 'POST'],
+//   },
+// });
+
 const io = new Server(httpServer, {
   cors: {
-    origin: '*', // In production, restrict this to your frontend URL
-    methods: ['GET', 'POST'],
-  },
+    origin: "https://agent-com01.vercel.app", // Your Vercel URL
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+
 
 // Routes
 app.use('/api', whatsappRoutes);
