@@ -3,7 +3,7 @@ import axios from 'axios';
 import socket from '../socket';
 import { MessageSquare, User, Send, Search, MoreVertical, Phone, Video, Paperclip, Smile } from 'lucide-react';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = `${import.meta.env.VITE_BACKEND_URL || 'https://agentcom-wxmv.onrender.com'}/api`;
 
 const Messages = ({ agentId }) => {
   const [conversations, setConversations] = useState([]);

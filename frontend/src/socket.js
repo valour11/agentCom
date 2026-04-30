@@ -1,5 +1,7 @@
 import { io } from 'socket.io-client';
 
-const socket = io(process.env.VITE_BACKEND_URL || 'http://localhost:5000');
+const SOCKET_URL = import.meta.env.VITE_BACKEND_URL || 'https://agentcom-wxmv.onrender.com';
+
+const socket = io(SOCKET_URL);
 
 export default socket;

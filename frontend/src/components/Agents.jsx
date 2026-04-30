@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { User, Plus, X, Shield } from 'lucide-react';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = `${import.meta.env.VITE_BACKEND_URL || 'https://agentcom-wxmv.onrender.com'}/api`;
 
 const Agents = () => {
   const [agents, setAgents] = useState([]);
