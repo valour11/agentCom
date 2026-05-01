@@ -42,16 +42,15 @@ const Agents = () => {
   };
 
   return (
-    <div className="h-full overflow-y-auto" style={{ padding: '32px' }}>
-      {/* Page Header */}
-      <div className="flex items-center justify-between" style={{ marginBottom: '32px' }}>
+    <div className="h-full overflow-y-auto" style={{ padding: '16px' }}>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3" style={{ marginBottom: '32px' }}>
         <div>
           <h2 className="text-xl font-bold" style={{ color: '#24439b' }}>Agents</h2>
           <p className="text-sm" style={{ color: '#5f7bd6', marginTop: '4px' }}>Manage your team members</p>
         </div>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="flex items-center text-white text-sm font-medium rounded-xl transition-all duration-300 hover:brightness-110 hover:-translate-y-0.5"
+          className="flex items-center text-white text-sm font-medium rounded-xl transition-all duration-300 hover:brightness-110 hover:-translate-y-0.5 w-full sm:w-auto justify-center"
           style={{
             padding: '10px 20px',
             gap: '8px',
@@ -139,9 +138,9 @@ const Agents = () => {
           />
 
           <div
-            className="relative w-full max-w-md"
+            className="relative w-full mx-4 sm:mx-0 sm:max-w-md"
             style={{
-              padding: '32px',
+              padding: '24px',
               background: 'rgba(245, 243, 252, 0.95)',
               backdropFilter: 'blur(16px)',
               borderRadius: '24px',

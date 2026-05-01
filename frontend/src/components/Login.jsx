@@ -30,7 +30,7 @@ const Login = () => {
 
   return (
     <div
-      className="min-h-screen w-screen flex items-center justify-center p-6"
+      className="min-h-screen w-screen flex items-center justify-center p-4 sm:p-6"
       style={{
         background: 'linear-gradient(135deg, #a9c7f5 0%, #e7c3dd 100%)',
       }}
@@ -41,7 +41,7 @@ const Login = () => {
           background: 'rgba(245, 243, 252, 0.88)',
           backdropFilter: 'blur(10px)',
           borderRadius: '22px',
-          padding: '40px 36px',
+          padding: '32px 24px',
           boxShadow: '0 15px 35px rgba(0,0,0,0.08)',
         }}
       >
@@ -58,7 +58,7 @@ const Login = () => {
 
         <div className="text-center mb-[40px]">
           <h1
-            className="text-[34px] font-bold leading-tight"
+            className="text-[28px] sm:text-[34px] font-bold leading-tight"
             style={{ color: '#24439b' }}
           >
             Welcome back
@@ -87,7 +87,7 @@ const Login = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full h-[54px] px-4 text-[15px] outline-none transition-all"
+              className="w-full h-[46px] sm:h-[54px] px-4 text-[15px] outline-none transition-all"
               style={{
                 borderRadius: '10px',
                 border: '1px solid rgba(120, 160, 255, 0.45)',
