@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import socket from '../socket';
-import { MessageSquare, User, Send, Search, MoreVertical, Phone, Video, Paperclip, Smile } from 'lucide-react';
+import { MessageSquare, User, Send, Search, MoreVertical, Video, Paperclip, Smile, ArrowLeft } from 'lucide-react';
 
 const API_URL = `${import.meta.env.VITE_BACKEND_URL || 'https://agentcom-wxmv.onrender.com'}/api`;
 
@@ -11,6 +11,7 @@ const Messages = ({ agentId }) => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showConversationList, setShowConversationList] = useState(true);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -128,25 +129,32 @@ const Messages = ({ agentId }) => {
     }
   };
 
+  const handleSelectConversation = (conv) => {
+    setActiveConversation(conv);
+    setShowConversationList(false);
+  };
+
+  const handleBackToList = () => {
+    setShowConversationList(true);
+  };
+
   const filteredConversations = conversations.filter(c =>
     c.contact?.phoneNumber?.includes(searchQuery) || ''
   );
 
   return (
-    <div className="h-full flex gap-5">
-      {/* Conversation Panel */}
+    <div className="h-full flex flex-col md:flex-row gap-3 md:gap-5">
       <div
-        className="w-[320px] flex flex-col flex-shrink-0 overflow-hidden"
+        className={`${showConversationList ? 'flex' : 'hidden'} md:flex flex-col flex-shrink-0 overflow-hidden w-full md:w-[320px]`}
         style={{
           background: 'rgba(245, 243, 252, 0.85)',
           backdropFilter: 'blur(10px)',
           borderRadius: '20px',
           boxShadow: '0 8px 25px rgba(0,0,0,0.06)',
           border: '1px solid rgba(120,160,255,0.12)',
-          padding: '20px',
+          padding: '16px',
         }}
       >
-        {/* Panel Header */}
         <div className="flex items-center justify-between rounded-md">
           <h2 className="text-sm font-semibold" style={{ color: '#24439b' }}>All Messages</h2>
           <span
@@ -160,7 +168,6 @@ const Messages = ({ agentId }) => {
           </span>
         </div>
 
-        {/* Search */}
         <div className="relative" style={{ marginTop: '16px', marginBottom: '18px' }}>
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#8bb1ff' }} />
           <input
@@ -188,7 +195,6 @@ const Messages = ({ agentId }) => {
           />
         </div>
 
-        {/* Conversation List */}
         <div className="flex-1 overflow-y-auto" style={{ borderTop: '1px solid rgba(120,160,255,0.1)', paddingTop: '4px' }}>
           {filteredConversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-center" style={{ paddingTop: '40px', paddingBottom: '40px', gap: '18px' }}>
@@ -208,7 +214,7 @@ const Messages = ({ agentId }) => {
               {filteredConversations.map((conv) => (
                 <button
                   key={conv.id}
-                  onClick={() => setActiveConversation(conv)}
+                  onClick={() => handleSelectConversation(conv)}
                   className="w-full flex items-start text-left transition-all duration-300"
                   style={{
                     padding: '14px 16px',
@@ -265,16 +271,14 @@ const Messages = ({ agentId }) => {
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className={`${!showConversationList ? 'flex' : 'hidden'} md:flex flex-1 flex-col min-w-0 overflow-hidden`}>
         {activeConversation ? (
           <>
-            {/* Chat Header */}
             <div
               className="flex items-center justify-between flex-shrink-0"
               style={{
                 height: '64px',
-                padding: '0 24px',
+                padding: '0 16px',
                 background: 'rgba(245, 243, 252, 0.85)',
                 backdropFilter: 'blur(10px)',
                 borderRadius: '20px',
@@ -283,6 +287,13 @@ const Messages = ({ agentId }) => {
               }}
             >
               <div className="flex items-center gap-3">
+                <button
+                  className="md:hidden p-1 rounded-lg hover:bg-white/40 transition-colors"
+                  onClick={handleBackToList}
+                  style={{ color: '#24439b' }}
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
                 <div
                   className="flex items-center justify-center flex-shrink-0"
                   style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #6aa7ff 0%, #8a5cf6 100%)' }}
@@ -312,10 +323,10 @@ const Messages = ({ agentId }) => {
                     Claim Chat
                   </button>
                 )}
-                {[Phone, Video, MoreVertical].map((Icon, i) => (
+                {[Video, MoreVertical].map((Icon, i) => (
                   <button
                     key={i}
-                    className="rounded-xl transition-all duration-300"
+                    className="rounded-xl transition-all duration-300 hidden sm:flex"
                     style={{ padding: '10px', color: '#8bb1ff' }}
                     onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.4)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
@@ -326,10 +337,9 @@ const Messages = ({ agentId }) => {
               </div>
             </div>
 
-            {/* Messages Area */}
             <div
               className="flex-1 overflow-y-auto"
-              style={{ marginTop: '20px', padding: '32px', borderRadius: '24px', background: 'rgba(245, 243, 252, 0.35)', border: '1px solid rgba(120,160,255,0.08)' }}
+              style={{ marginTop: '20px', padding: '16px', borderRadius: '24px', background: 'rgba(245, 243, 252, 0.35)', border: '1px solid rgba(120,160,255,0.08)' }}
             >
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center text-center" style={{ paddingTop: '60px', paddingBottom: '60px', gap: '18px' }}>
@@ -352,7 +362,7 @@ const Messages = ({ agentId }) => {
                       className={`flex ${msg.senderType === 'agent' ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className="max-w-[60%]"
+                        className="max-w-[85%] sm:max-w-[60%]"
                         style={{
                           padding: '12px 16px',
                           borderRadius: msg.senderType === 'agent' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
@@ -376,13 +386,12 @@ const Messages = ({ agentId }) => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input Bar */}
             <div
               className="flex-shrink-0"
-              style={{ marginTop: '20px', padding: '16px 20px', background: 'rgba(245, 243, 252, 0.85)', backdropFilter: 'blur(10px)', borderRadius: '20px', border: '1px solid rgba(120,160,255,0.12)' }}
+              style={{ marginTop: '20px', padding: '12px 16px', background: 'rgba(245, 243, 252, 0.85)', backdropFilter: 'blur(10px)', borderRadius: '20px', border: '1px solid rgba(120,160,255,0.12)' }}
             >
-              <form onSubmit={handleSendMessage} className="flex items-center gap-3">
-                <button type="button" className="rounded-xl transition-all duration-300 flex-shrink-0" style={{ padding: '10px', color: '#8bb1ff' }}
+              <form onSubmit={handleSendMessage} className="flex items-center gap-2 md:gap-3">
+                <button type="button" className="rounded-xl transition-all duration-300 flex-shrink-0 hidden sm:flex" style={{ padding: '10px', color: '#8bb1ff' }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.4)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
@@ -411,7 +420,7 @@ const Messages = ({ agentId }) => {
                     e.target.style.borderColor = 'rgba(120, 160, 255, 0.45)';
                   }}
                 />
-                <button type="button" className="rounded-xl transition-all duration-300 flex-shrink-0" style={{ padding: '10px', color: '#8bb1ff' }}
+                <button type="button" className="rounded-xl transition-all duration-300 flex-shrink-0 hidden sm:flex" style={{ padding: '10px', color: '#8bb1ff' }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.4)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
@@ -433,7 +442,6 @@ const Messages = ({ agentId }) => {
             </div>
           </>
         ) : (
-          /* Empty State */
           <div
             className="flex-1 flex items-center justify-center"
             style={{
